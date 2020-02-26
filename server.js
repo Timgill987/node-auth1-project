@@ -12,8 +12,6 @@ const server = express();
 const sessionsConfig = {
     name: "pikachu", //sid
     secret: "I wanna be the very best",
-    resave: false,
-    saveUninitialized: true, // GDPR laws against setting cookies
     
     cookie: {
         maxAge: 1000 * 30,
@@ -21,12 +19,14 @@ const sessionsConfig = {
         httpOnly: true
     },
     store: new KnexStore({
-        knex,
+        knex: knex,
         tablename: "sessions",
         createtable: true,
         sidfieldname: "sid",
         clearInterval: 1000 * 60 * 15,
     }),
+    resave: false,
+    saveUninitialized: true, // GDPR laws against setting cookies
 };
 
 server.use(helmet());
